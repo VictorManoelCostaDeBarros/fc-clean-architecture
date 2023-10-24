@@ -4,7 +4,12 @@ import ProductModel from "../../../infrastructure/product/repository/sequelize/p
 import ProductRepository from "../../../infrastructure/product/repository/sequelize/product.repository";
 import Product from "../../../domain/product/entity/product";
 
-describe("Test find product use case", () => {
+const input = {
+  name: "Product",
+  price: 10
+}
+
+describe("Test create product use case", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -23,18 +28,16 @@ describe("Test find product use case", () => {
     await sequelize.close();
   })
 
-  it("should find a product", async () => {
+  it("should create a product", async () => {
     const productRepository = new ProductRepository();
     const usecase = new CreateProductUseCase(productRepository)
 
-    const product = new Product("123", "Product", 10)
-
-    const result = await usecase.execute(product)
+    const result = await usecase.execute(input)
 
     expect(result).toEqual({
-      id: product.id,
-      name: product.name,
-      price: product.price,
+      id: expect.any(String),
+      name: input.name,
+      price: input.price,
     })
   })
 })
